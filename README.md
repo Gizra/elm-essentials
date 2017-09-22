@@ -56,3 +56,7 @@ in many Gizra projects.
     - [elm-community/maybe-extra](http://package.elm-lang.org/packages/elm-community/maybe-extra/latest)
 
       Convenience functions for working with Maybe
+
+    - [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/latest)
+
+      A pipeline-friendly library for building JSON decoders.
