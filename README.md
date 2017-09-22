@@ -3,13 +3,15 @@
 # elm-essentials
 
 This package represents an attempt to factor out a variety of small utilities that
-are commonly used in Gizra projects.
+are commonly used in Gizra projects, but are too minor for packages of their own.
 
 - It is a companion to [drupal-elm-starter](https://github.com/Gizra/drupal-elm-starter).
   `drupal-elm-starter` represents an entire (but simple) sample app, whereas this contains
   pieces of code as a package that can be used in multiple projects.
 
-- It includes things that don't fit easily into more focused Gizra packages, such as:
+- It omits things that aren't generally useful, because they are too tied to specific projects.
+
+- It only includes things that don't fit easily into more focused Gizra packages, such as:
 
     - [Gizra/elm-all-set](http://package.elm-lang.org/packages/Gizra/elm-all-set/latest)
 
@@ -39,15 +41,13 @@ are commonly used in Gizra projects.
 
       A StorageKey represents a value that is either New or Existing.
 
+So, if parts of this end up forming a substantial, focused package, they will eventually be split
+off into packages of their own.
 
 ## Other Packages
 
 In the spirit of identifying essentials, here are some packages which are used
 in many Gizra projects.
-
-    - [rgrempel/elm-route-url](http://package.elm-lang.org/packages/rgrempel/elm-route-url/latest)
-
-      Router for single-page-apps in Elm
 
     - [elm-community/list-extra](http://package.elm-lang.org/packages/elm-community/list-extra/latest)
 
@@ -57,6 +57,14 @@ in many Gizra projects.
 
       Convenience functions for working with Maybe
 
+    - [myrho/elm-round](http://package.elm-lang.org/packages/myrho/elm-round/latest)
+
+      Round floats (mathematically/commercially) to a given number of decimal places
+
     - [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/latest)
 
       A pipeline-friendly library for building JSON decoders.
+
+    - [rgrempel/elm-route-url](http://package.elm-lang.org/packages/rgrempel/elm-route-url/latest)
+
+      Router for single-page-apps in Elm
