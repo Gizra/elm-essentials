@@ -1,0 +1,28 @@
+{
+  "name": "elm-essentials",
+  "version": "1.0.0",
+  "description": "Various utilities commonly used in Gizra projects",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "elm": "^0.18.0",
+    "elm-doc-test": "^4.0.0",
+    "elm-test": "^0.18.9"
+  },
+  "scripts": {
+    "test": "elm-doc-test && elm-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gizra/elm-essentials.git"
+  },
+  "author": "Ryan Rempel <ryan@gizra.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gizra/elm-essentials/issues"
+  },
+  "homepage": "https://github.com/Gizra/elm-essentials#readme"
+}
