@@ -49,22 +49,22 @@ off into packages of their own.
 In the spirit of identifying essentials, here are some packages which are used
 in many Gizra projects.
 
-    - [elm-community/list-extra](http://package.elm-lang.org/packages/elm-community/list-extra/latest)
+- [elm-community/list-extra](http://package.elm-lang.org/packages/elm-community/list-extra/latest)
 
-      Convenience functions for working with List
+  Convenience functions for working with List
 
-    - [elm-community/maybe-extra](http://package.elm-lang.org/packages/elm-community/maybe-extra/latest)
+- [elm-community/maybe-extra](http://package.elm-lang.org/packages/elm-community/maybe-extra/latest)
 
-      Convenience functions for working with Maybe
+  Convenience functions for working with Maybe
 
-    - [myrho/elm-round](http://package.elm-lang.org/packages/myrho/elm-round/latest)
+- [myrho/elm-round](http://package.elm-lang.org/packages/myrho/elm-round/latest)
 
-      Round floats (mathematically/commercially) to a given number of decimal places
+  Round floats (mathematically/commercially) to a given number of decimal places
 
-    - [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/latest)
+- [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/latest)
 
-      A pipeline-friendly library for building JSON decoders.
+  A pipeline-friendly library for building JSON decoders.
 
-    - [rgrempel/elm-route-url](http://package.elm-lang.org/packages/rgrempel/elm-route-url/latest)
+- [rgrempel/elm-route-url](http://package.elm-lang.org/packages/rgrempel/elm-route-url/latest)
 
-      Router for single-page-apps in Elm
+  Router for single-page-apps in Elm
