@@ -9,7 +9,6 @@ module Gizra.Date exposing (formatDDMMYY, formatDDMMYYhhmm)
 import Date exposing (Date, Month(..), month, year, hour, minute)
 import Gizra.String exposing (addLeadingZero)
 import List.Extra exposing (elemIndex)
-import String exposing (length)
 
 
 {-| Format a date using the supplied delimiter.
