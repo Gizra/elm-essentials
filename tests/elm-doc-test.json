@@ -4,6 +4,7 @@
         "Gizra.Date",
         "Gizra.Dom",
         "Gizra.Html",
+        "Gizra.Json",
         "Gizra.Maybe",
         "Gizra.String"
     ]

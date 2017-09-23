@@ -59,7 +59,21 @@ encodeAnyDict keyFunc valueFunc =
         >> object
 
 
-{-| Cast String to Int
+{-| Decodes an `Int`, but if given a `String`, will convert it to an `Int`
+if possible.
+
+    import Json.Decode exposing (..)
+    import Result exposing (Result(..), mapError)
+
+    decodeString decodeInt """ "7" """ --> Ok 7
+
+    decodeString decodeInt """ 7 """ --> Ok 7
+
+    """ "not an int" """
+        |> decodeString decodeInt
+        |> mapError (always "")
+    --> Err ""
+
 -}
 decodeInt : Decoder Int
 decodeInt =
@@ -78,7 +92,14 @@ decodeInt =
         ]
 
 
-{-| Cast to String
+{-| Decodes a `String`, but if given an `Int` will convert it to a `String`.
+
+    decodeString decodeIntToString """ "7" """ --> Ok "7"
+
+    decodeString decodeIntToString """ 7 """ --> Ok "7"
+
+    decodeString decodeIntToString """ "other string" """ --> Ok "other string"
+
 -}
 decodeIntToString : Decoder String
 decodeIntToString =
@@ -88,7 +109,18 @@ decodeIntToString =
         ]
 
 
-{-| Cast String to Float
+{-| Decodes a `Float` -- but, if given a `String`, will convert it to a
+`Float` if possible.
+
+    decodeString decodeFloat """ "7.1" """ --> Ok 7.1
+
+    decodeString decodeFloat """ 7.1 """ --> Ok 7.1
+
+    """ "not a float" """
+        |> decodeString decodeFloat
+        |> mapError (always "")
+    --> Err ""
+
 -}
 decodeFloat : Decoder Float
 decodeFloat =
@@ -109,6 +141,13 @@ decodeFloat =
 
 {-| Given a decoder for the values, decode a dictionary that has integer keys.
 The resulting decoder will fail if any of the keys can't be converted to an `Int`.
+
+    import Dict
+
+    """ { "27" : "value" } """
+        |> decodeString (decodeIntDict string)
+    --> Ok <| Dict.fromList [ (27, "value") ]
+
 -}
 decodeIntDict : Decoder value -> Decoder (Dict Int value)
 decodeIntDict =
@@ -116,6 +155,16 @@ decodeIntDict =
 
 
 {-| If given an empty array, decodes it as the given value. Otherwise, fail.
+
+    """ [] """
+        |> decodeString (decodeEmptyArrayAs "empty")
+    --> Ok "empty"
+
+    """ [27] """
+        |> decodeString (decodeEmptyArrayAs "empty")
+        |> mapError (always "error")
+    --> Err "error"
+
 -}
 decodeEmptyArrayAs : a -> Decoder a
 decodeEmptyArrayAs default =
@@ -136,6 +185,14 @@ decodeEmptyArrayAs default =
 {-| This is for JSON which is embedded as a string value. Given a decoder, this
 will produce a decoder that first decodes a string, and then run the supplied
 decoder on that JSON string.
+
+So, in the example below, note how the `[27, 32]` is wrapped as a string, rather
+than being "normal" JSON. With `decodeJsonInString`, we can "unwrap" it.
+
+    """ { "wrappedJson": "[27, 32]" } """
+        |> decodeString (field "wrappedJson" (decodeJsonInString (list int)))
+    --> Ok [27, 32]
+
 -}
 decodeJsonInString : Decoder a -> Decoder a
 decodeJsonInString decoder =
