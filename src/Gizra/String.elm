@@ -70,7 +70,7 @@ Checks the prefixes in order, and uses the first which matches.
 -}
 requireAndStripPrefix : List String -> String -> Maybe String
 requireAndStripPrefix prefixes string =
-    case validate string startsWith prefixes of
+    case startsWithOneOf prefixes string of
         Just prefix ->
             dropLeft (length prefix) string |> Just
 
@@ -80,22 +80,42 @@ requireAndStripPrefix prefixes string =
 
 {-| Checks whether the string starts with one of the provided prefixes.
 If so, returns the prefix.
+
+    startsWithOneOf ["apple", "banana"] "apple 27" --> Just "apple"
+
+    startsWithOneOf ["apple", "banana"] "banana 27" --> Just "banana"
+
+    startsWithOneOf ["apple", "banana"] "grapefruit 35" --> Nothing
+
 -}
-startsWithOneOf : List String -> String -> Bool
-startsWithOneOf prefixes string =
-    validate string startsWith prefixes |> isJust
+startsWithOneOf : List String -> String -> Maybe String
+startsWithOneOf =
+    validate startsWith
 
 
 {-| Checks whether the string ends with one of the provided prefixes.
 If so, returns the suffix.
+
+    endsWithOneOf ["apples", "bananas"] "27 apples" --> Just "apples"
+
+    endsWithOneOf ["apples", "bananas"] "27 bananas" --> Just "bananas"
+
+    endsWithOneOf ["apples", "bananas"] "35 grapefruits" --> Nothing
+
 -}
-endsWithOneOf : List String -> String -> Bool
-endsWithOneOf suffixes string =
-    validate string endsWith suffixes |> isJust
+endsWithOneOf : List String -> String -> Maybe String
+endsWithOneOf =
+    validate endsWith
 
 
-{-| If string start with prefix, replace the prefix in string with newPrefix.
-Otherwise, just return the string.
+{-| If the string (third parameter) starts with the prefix (first parameter),
+replace the prefix with a new prefix (second parameter). Otherwise, just
+return the string.
+
+    replacePrefixWith "http" "https" "http://apple.com/" --> "https://apple.com/"
+
+    replacePrefixWith "http" "https" "ftp://ftp.apple.com/" --> "ftp://ftp.apple.com/"
+
 -}
 replacePrefixWith : String -> String -> String -> String
 replacePrefixWith prefix newPrefix string =
@@ -105,8 +125,8 @@ replacePrefixWith prefix newPrefix string =
         string
 
 
-validate : String -> (String -> String -> Bool) -> List String -> Maybe String
-validate string function options =
+validate : (String -> String -> Bool) -> List String -> String -> Maybe String
+validate function options string =
     case options of
         option :: rest ->
             if function option string then
@@ -115,13 +135,20 @@ validate string function options =
                 -- Recursively check the rest of the suffixes.
                 -- This should be tail-call optimized by the compiler,
                 -- so we shouldn't need to worry about the stack.
-                validate string function rest
+                validate function rest string
 
         [] ->
             Nothing
 
 
 {-| Pad the string to the desired length by adding leading zeroes.
+
+    addLeadingZeroes 2 "1" --> "01"
+
+    addLeadingZeroes 3 "17" --> "017"
+
+    addLeadingZeroes 2 "27"  --> "27"
+
 -}
 addLeadingZeroes : Int -> String -> String
 addLeadingZeroes desiredLength =
@@ -129,13 +156,27 @@ addLeadingZeroes desiredLength =
 
 
 {-| Add a leading zero to ensure that the string length is 2.
+
+    addLeadingZero "1" --> "01"
+
+    addLeadingZero "17" --> "17"
+
 -}
 addLeadingZero : String -> String
 addLeadingZero =
     addLeadingZeroes 2
 
 
-{-| Is the string empty or composed only of whitespace?
+{-| Returns `True` if the string is empty, or composed only of whitespace.
+
+    isBlank "" --> True
+
+    isBlank "   " --> True
+
+    isBlank "\t\n\r" --> True
+
+    isBlank "blank" --> False
+
 -}
 isBlank : String -> Bool
 isBlank string =
