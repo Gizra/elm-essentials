@@ -3,6 +3,7 @@
     "tests": [
         "Gizra.Date",
         "Gizra.Dom",
+        "Gizra.Html",
         "Gizra.Maybe",
         "Gizra.String"
     ]

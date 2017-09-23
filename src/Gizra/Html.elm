@@ -43,13 +43,21 @@ import Round
 
 
 {-| A convenience for keyed divs.
+
+You can use it just like `Html.div`.
+
+    divKeyed []
+        [ ("first-key", functionThatProducesSomeHtml)
+        , ("second-key", anotherFunction)
+        ]
+
 -}
 divKeyed : List (Attribute msg) -> List ( String, Html msg ) -> Html msg
 divKeyed =
     Html.Keyed.node "div"
 
 
-{-| Like `divKeyed`, but also gives the resulting div a key.
+{-| Like `divKeyed`, but you also provide a key for the div itself.
 -}
 keyedDivKeyed : String -> List (Attribute msg) -> List ( String, Html msg ) -> ( String, Html msg )
 keyedDivKeyed key attrs children =
@@ -57,14 +65,34 @@ keyedDivKeyed key attrs children =
         divKeyed attrs children
 
 
-{-| A convenience for putting things in keyed elements.
+{-| A convenience for putting things in keyed elements. It's just the
+`(,)` operator, but it reads nicely in typical idioms. For instance,
+you can do things like:
+
+    keyedDiv []
+        [ functionThatProducesHtml
+            |> keyed "first-key"
+        , anotherFunctionThatProducesHtml
+            |> Html.map SomeMsgWrapper
+            |> keyed "second-key"
+        ]
+
+Part of the reasoning here is that it's really the caller's job to provide a
+key, since the key needs to be unique amongst the things in the list that the
+caller is creating. So, functions that produce HTML shouldn't supply a key
+themselves -- it should be supplied by the caller. And this is a convenient
+idiom for doing that.
+
 -}
 keyed : String -> Html msg -> ( String, Html msg )
 keyed =
     (,)
 
 
-{-| Convert integer to CSS px
+{-| Convert integer to CSS px.
+
+    intToPx 27 --> "27px"
+
 -}
 intToPx : Int -> String
 intToPx val =
@@ -73,6 +101,11 @@ intToPx val =
 
 {-| Convert float to CSS px, with just 1 decimal point, since a px
 is already pretty small.
+
+    floatToPx 27 --> "27.0px"
+
+    floatToPx 32.56 --> "32.6px"
+
 -}
 floatToPx : Float -> String
 floatToPx val =
@@ -106,7 +139,7 @@ preventDefault =
     }
 
 
-{-| Produces an empty text node in the DOM.
+{-| Produces an empty text node for the DOM.
 -}
 emptyNode : Html msg
 emptyNode =
@@ -116,9 +149,11 @@ emptyNode =
 {-| Conditionally show Html. A bit cleaner than using if expressions in middle
 of an html block:
 
-    showIf True <| text "I'm shown"
+    text "I'm shown"
+        |> showIf True
 
-    showIf False <| text "I'm not shown"
+    text "I'm not shown"
+        |> showIf False
 
 -}
 showIf : Bool -> Html msg -> Html msg
