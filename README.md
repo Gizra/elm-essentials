@@ -49,6 +49,10 @@ off into packages of their own.
 In the spirit of identifying essentials, here are some packages which are used
 in many Gizra projects.
 
+- [ccapndave/elm-update-extra](http://package.elm-lang.org/packages/ccapndave/elm-update-extra/latest)
+
+  Convenience functions for working with the update function in The Elm Architecture.
+
 - [elm-community/list-extra](http://package.elm-lang.org/packages/elm-community/list-extra/latest)
 
   Convenience functions for working with List
@@ -56,6 +60,14 @@ in many Gizra projects.
 - [elm-community/maybe-extra](http://package.elm-lang.org/packages/elm-community/maybe-extra/latest)
 
   Convenience functions for working with Maybe
+
+- [krisajenkins/remotedata](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
+
+  Tools for fetching data from remote sources (incl. HTTP).
+
+- [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest)
+
+  Extra functions for more easily building HTTP requests
 
 - [myrho/elm-round](http://package.elm-lang.org/packages/myrho/elm-round/latest)
 

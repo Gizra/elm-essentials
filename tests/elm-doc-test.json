@@ -1,6 +1,7 @@
 {
     "root": "../src",
     "tests": [
+        "Gizra.Date",
         "Gizra.String"
     ]
 }

@@ -1,8 +1,8 @@
-module Gizra.Date exposing (formatDDMMYY, formatDDMMYYhhmm)
+module Gizra.Date exposing (allMonths, formatDDMMYY, formatDDMMYYhhmm)
 
 {-| Some functions for working with dates.
 
-@docs formatDDMMYY, formatDDMMYYhhmm
+@docs formatDDMMYY, formatDDMMYYhhmm, allMonths
 
 -}
 
@@ -13,7 +13,20 @@ import List.Extra exposing (elemIndex)
 
 {-| Format a date using the supplied delimiter.
 
-With a delimiter of '-', you might end up with '27-03-95'.
+    import Date exposing (fromString)
+    import Result exposing (Result(Ok), map)
+
+    fromString "February 3, 1971"
+        |> map (formatDDMMYY "-")
+    --> Ok "03-02-71"
+
+    fromString "February 3, 1971"
+        |> map (formatDDMMYY "/")
+    --> Ok "03/02/71"
+
+    fromString "October 2, 2005"
+        |> map (formatDDMMYY "-")
+    --> Ok "02-10-05"
 
 -}
 formatDDMMYY : String -> Date -> String
@@ -29,7 +42,17 @@ formatDDMMYY delimiter date =
 
 {-| Format a data using the supplied delimiter.
 
-With a delimiter of '-', you might end up with '27-03-95 12:43'.
+    fromString "February 3, 1971 2:03 PM"
+        |> map (formatDDMMYYhhmm "-")
+    --> Ok "03-02-71 14:03"
+
+    fromString "February 3, 1971 12:04 PM"
+        |> map (formatDDMMYYhhmm "/")
+    --> Ok "03/02/71 12:04"
+
+    fromString "October 2, 2005 4:12 PM"
+        |> map (formatDDMMYYhhmm "-")
+    --> Ok "02-10-05 16:12"
 
 -}
 formatDDMMYYhhmm : String -> Date -> String
@@ -40,7 +63,7 @@ formatDDMMYYhhmm delimiter date =
 
 monthMM : Date -> String
 monthMM date =
-    case elemIndex (month date) monthList of
+    case elemIndex (month date) allMonths of
         Just index ->
             index + 1 |> toString |> addLeadingZero
 
@@ -54,6 +77,8 @@ yearYY date =
     (year date) % 100 |> toString |> addLeadingZero
 
 
-monthList : List Month
-monthList =
+{-| A list of all the months, in the traditional order.
+-}
+allMonths : List Month
+allMonths =
     [ Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec ]

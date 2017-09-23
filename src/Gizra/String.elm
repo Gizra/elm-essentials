@@ -1,4 +1,32 @@
-module Gizra.String exposing (requireAndStripPrefix, startsWithOneOf, endsWithOneOf, replacePrefixWith, addLeadingZero, addLeadingZeroes, isBlank)
+module Gizra.String
+    exposing
+        ( addLeadingZero
+        , addLeadingZeroes
+        , endsWithOneOf
+        , isBlank
+        , replacePrefixWith
+        , requireAndStripPrefix
+        , startsWithOneOf
+        )
+
+{-| Some functions that work with strings.
+
+
+## Whitespace
+
+@docs isBlank
+
+
+## Prefixes and suffixes
+
+@docs startsWithOneOf, endsWithOneOf, replacePrefixWith, requireAndStripPrefix
+
+
+## Padding
+
+@docs addLeadingZero, addLeadingZeroes
+
+-}
 
 import Maybe.Extra exposing (isJust)
 import String exposing (startsWith, dropLeft, length, endsWith, padLeft)
