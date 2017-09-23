@@ -5,6 +5,7 @@
         "Gizra.Dom",
         "Gizra.Html",
         "Gizra.Json",
+        "Gizra.List",
         "Gizra.Maybe",
         "Gizra.String"
     ]

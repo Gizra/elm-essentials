@@ -10,6 +10,15 @@ module Gizra.List exposing (insertAt, sortDescending)
 {-| Insert an element at the specified position. Will insert at the
 head if the position is negative, and at the end if the position is
 out of range.
+
+    insertAt -1 "d" ["a", "b", "c"] --> ["d", "a", "b", "c"]
+
+    insertAt 0 "d" ["a", "b", "c"] --> ["d", "a", "b", "c"]
+
+    insertAt 1 "d" ["a", "b", "c"] --> ["a", "d", "b", "c"]
+
+    insertAt 100 "d" ["a", "b", "c"] --> ["a", "b", "c", "d"]
+
 -}
 insertAt : Int -> a -> List a -> List a
 insertAt index element list =
@@ -20,6 +29,9 @@ insertAt index element list =
 
 
 {-| Sort the list in descending order.
+
+    sortDescending ["a", "c", "b"] --> ["c", "b", "a"]
+
 -}
 sortDescending : List comparable -> List comparable
 sortDescending =
