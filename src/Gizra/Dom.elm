@@ -11,7 +11,19 @@ import Json.Decode.Pipeline exposing (decode, required)
 import Json.Decode
 
 
-{-| Applies the supplied decoder to the "target" of the event.
+{-| Applies the supplied decoder to the "target" field.
+
+    import Json.Decode exposing (..)
+    import Result exposing (Result(..), mapError)
+
+    """
+        { "target":
+            { "id": "an-id" }
+        }
+    """
+        |> decodeString (target (field "id" string))
+    --> Ok "an-id"
+
 -}
 target : Decoder a -> Decoder a
 target =
@@ -20,15 +32,86 @@ target =
 
 {-| Like `target`, but instead of getting the element that received the
 event, this gets the element on which the event handler was placed.
+
+    """
+        { "currentTarget":
+            { "id": "an-id" }
+        }
+    """
+        |> decodeString (currentTarget (field "id" string))
+    --> Ok "an-id"
+
 -}
 currentTarget : Decoder a -> Decoder a
 currentTarget =
     field "currentTarget"
 
 
-{-| Finds an ancestor for whom the first decoder suceeds. Then, runs the second
-decoder on that ancestor. Fails if no ancestor is found, or if it is found and
-the decoder fails.
+{-| You supply two decoders.
+
+We use the first decoder to select an ancestor. We start with the object
+itself, and then look at each of its ancestors in turn (via `parentElement`).
+We stop when the first decoder succeeds with a `True`.
+
+Then, we take the selected ancestor and apply the second decoder
+
+The resulting decoder will fail if no ancestor is found via the first decoder,
+or if the second decoder fails once we've found an ancestor to apply it to.
+
+    """
+        { "id": "id1"
+        , "height": 1
+        }
+    """
+        |> decodeString (findAncestor (checkId "id1") (field "height" int))
+    --> Ok 1
+
+    """
+        { "id": "id1"
+        , "height": 1
+        }
+    """
+        |> decodeString (findAncestor (checkId "id1") (field "non-existent" int))
+        |> mapError (always "")
+    --> Err ""
+
+    """
+        { "id": "id1"
+        , "height": 1
+        }
+    """
+        |> decodeString (findAncestor (checkId "non-existent") (field "height" int))
+        |> mapError (always "")
+    --> Err ""
+
+    """
+        { "id": "id1"
+        , "height": 1
+        , "parentElement":
+            { "id": "id2"
+            , "height": 2
+            }
+        }
+    """
+        |> decodeString (findAncestor (checkId "id2") (field "height" int))
+    --> Ok 2
+
+    """
+        { "id": "id1"
+        , "height": 1
+        , "parentElement":
+            { "id": "id2"
+            , "height": 2
+            , "parentElement":
+                { "id": "id3"
+                , "height": 3
+                }
+            }
+        }
+    """
+        |> decodeString (findAncestor (checkId "id3") (field "height" int))
+    --> Ok 3
+
 -}
 findAncestor : Decoder Bool -> Decoder a -> Decoder a
 findAncestor finder decoder =
@@ -53,7 +136,7 @@ findAncestor finder decoder =
             ]
 
 
-{-| Types for rectangles.
+{-| The dimensions of a rectangle.
 -}
 type alias Rectangle =
     { top : Float
@@ -64,6 +147,22 @@ type alias Rectangle =
 
 
 {-| Decodes a `DOMRect` Javascript object.
+
+    """
+        { "top": 27
+        , "left": 32
+        , "width": 45
+        , "height": 72
+        }
+    """
+        |> decodeString decodeDomRect
+    --> Ok
+            { top = 27
+            , left = 32
+            , width = 45
+            , height = 72
+            }
+
 -}
 decodeDomRect : Decoder Rectangle
 decodeDomRect =
@@ -74,8 +173,22 @@ decodeDomRect =
         |> required "height" float
 
 
-{-| Given a string, returns a decoder which indicates whether the
-`id` field is equal to that string.
+{-| Provides a decoder which indicates whether the `id` field is equal to the
+provided id. Fails if there is no `id` field.
+
+    """ { "id": "an-id" } """
+        |> decodeString (checkId "an-id")
+    --> Ok True
+
+    """ { "id": "an-id" } """
+        |> decodeString (checkId "a-different-id")
+    --> Ok False
+
+    """ { } """
+        |> decodeString (checkId "an-id")
+        |> mapError (always "")
+    --> Err ""
+
 -}
 checkId : String -> Decoder Bool
 checkId id =
