@@ -18,12 +18,12 @@ like this:
 
     type alias Model =
         -- Amongst other fields ...
-        { liveSessionId : WebData LiveSessionId
+        { id : WebData Int
         }
 
     type Msg
         -- Amongst other messages
-        = HandleFetchedId (WebData LiveSessionId)
+        = HandleFetchedId (WebData Int)
 
     -- The point is that the `update` method can now be very simple, since what
     -- is passed to `HandleFetchedId` will already be the `WebData ...` we want
@@ -31,19 +31,21 @@ like this:
     update msg model =
         case msg of
             HandleFetchedId id ->
-                { model | liveSessionId = id } ! []
+                ( { model | id = id }
+                , Cmd.none
+                )
 
     -- Given the format of the JSON returned by the server, this picks out the
     -- thing of the type we're interested in
-    decodeLiveSessionId : Decode.Decoder LiveSessionId
-    decodeLiveSessionId =
-        Decode.at [ "data", "live_session" ] decodeInt
+    decodeId : Decode.Decoder Int
+    decodeId =
+        Decode.at [ "data", "id" ] decodeInt
 
     -- You just need to build the `RequestBuilder`, and then call `sendWithHandler`
     fetchFromBackend =
         HttpBuilder.post
             |> -- whatever you need to finish the `RequestBuilder`
-            |> sendWithHandler decodeLiveSessionId HandleFetchedId
+            |> sendWithHandler decodeId HandleFetchedId
 
 -}
 sendWithHandler : Decoder a -> (WebData a -> msg) -> RequestBuilder any -> Cmd msg
