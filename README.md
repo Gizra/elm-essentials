@@ -61,6 +61,10 @@ in many Gizra projects.
 
   Convenience functions for working with Maybe
 
+- [etaque/elm-form](http://package.elm-lang.org/packages/etaque/elm-form/latest)
+
+  Live validation of form inputs in Elm
+
 - [krisajenkins/remotedata](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
   Tools for fetching data from remote sources (incl. HTTP).
