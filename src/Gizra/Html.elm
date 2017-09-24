@@ -10,6 +10,7 @@ module Gizra.Html
         , preventDefaultAndStopPropagation
         , stopPropagation
         , showIf
+        , showMaybe
         )
 
 {-| Utilities for working with `Html`
@@ -27,7 +28,7 @@ module Gizra.Html
 
 ## Conditionally show HTML
 
-@docs showIf, emptyNode
+@docs showIf, showMaybe, emptyNode
 
 
 ## CSS pixels
@@ -162,3 +163,10 @@ showIf condition html =
         html
     else
         emptyNode
+
+
+{-| Show Maybe Html if Just, or empty node if Nothing.
+-}
+showMaybe : Maybe (Html msg) -> Html msg
+showMaybe =
+    Maybe.withDefault emptyNode
