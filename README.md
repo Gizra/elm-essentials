@@ -53,6 +53,10 @@ in many Gizra projects.
 
   Convenience functions for working with the update function in The Elm Architecture.
 
+- [elm-community/elm-time](http://package.elm-lang.org/packages/elm-community/elm-time/latest)
+
+  A pure Elm date and time library.
+
 - [elm-community/list-extra](http://package.elm-lang.org/packages/elm-community/list-extra/latest)
 
   Convenience functions for working with List
@@ -64,6 +68,10 @@ in many Gizra projects.
 - [etaque/elm-form](http://package.elm-lang.org/packages/etaque/elm-form/latest)
 
   Live validation of form inputs in Elm
+
+- [justinmimbs/elm-date-extra](http://package.elm-lang.org/packages/justinmimbs/elm-date-extra/latest)
+
+  Extra functions for working with Date.
 
 - [krisajenkins/remotedata](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
