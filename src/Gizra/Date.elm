@@ -7,6 +7,7 @@ module Gizra.Date exposing (allMonths, formatDDMMYY, formatDDMMYYhhmm)
 -}
 
 import Date exposing (Date, Month(..), month, year, hour, minute)
+import Date.Extra.Facts exposing (months, monthNumberFromMonth)
 import Gizra.String exposing (addLeadingZero)
 import List.Extra exposing (elemIndex)
 
@@ -62,14 +63,8 @@ formatDDMMYYhhmm delimiter date =
 
 
 monthMM : Date -> String
-monthMM date =
-    case elemIndex (month date) allMonths of
-        Just index ->
-            index + 1 |> toString |> addLeadingZero
-
-        Nothing ->
-            -- Will never get here, as long as monthList is properly defined.
-            Debug.crash "Internal error in Gizra.Date.monthMM"
+monthMM =
+    month >> monthNumberFromMonth >> toString >> addLeadingZero
 
 
 yearYY : Date -> String
@@ -81,4 +76,4 @@ yearYY date =
 -}
 allMonths : List Month
 allMonths =
-    [ Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec ]
+    months
