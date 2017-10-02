@@ -2,6 +2,9 @@ module Gizra.Date exposing (allMonths, formatDDMMYY, formatDDMMYYhhmm)
 
 {-| Some functions for working with dates.
 
+Also consider `Gizra.NominalDate` for cases where you want a "pure"
+date, without time or time zone information.
+
 @docs formatDDMMYY, formatDDMMYYhhmm, allMonths
 
 -}

@@ -13,6 +13,7 @@
         "Gizra.Json",
         "Gizra.List",
         "Gizra.Maybe",
+        "Gizra.NominalDate",
         "Gizra.String",
         "Gizra.Update",
         "Gizra.WebData"
