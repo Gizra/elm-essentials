@@ -1,4 +1,4 @@
-module Gizra.Update exposing (sequenceExtra)
+module Gizra.Update exposing (andThenFetch, sequenceExtra)
 
 {-| Some conveniences for implementing the `update` function.
 
@@ -6,7 +6,7 @@ Using the various functions in
 [ccapndave/elm-update-extra](http://package.elm-lang.org/packages/ccapndave/elm-update-extra/latest)
 is also highly recommended.
 
-@docs sequenceExtra
+@docs andThenFetch, sequenceExtra
 
 -}
 
@@ -89,16 +89,22 @@ So, imagine that you have a function like this:
 
 Its job is to look at the model and decide whether there are any messages that
 ought to be processed (e.g. to fetch some needed data, but it isn't really
-limited to that).
+limited to that). It's convenient for this to be a separate function (that is,
+separate from `update`), because it doesn't depend on the `msg` ... it will be
+a function of something in the model which indicates what the `view` needs.
 
-It's convenient for this to be a separate function (that is, separate from
-`update`), because it doesn't depend on the `msg` ... it will be a function
-of something in the model which indicates what the `view` needs.
+However, we also need to apply this `fetch` function. That is where `andThenFetch`
+comes in. You provide:
 
-However, we need to apply this `fetch` function. So, this function takes your
-`fetch` function, and your `update` function, and returns a modified `update`
-function that will first do a regular `update`, and then call `fetch` and also
-process the messages it returns.
+  - your `fetch` function
+  - your `update` function
+
+What you get back is a function that has the same signature as your `update`
+function ... that is, it is also in the form `Msg -> Model -> (Model, Cmd
+Msg)`. However, after it calls your own `update` function, it calls your
+`fetch` function with the resulting `Model`, and then feeds those results back
+into your `update` function. So, whatever messages your `fetch` function
+returns will be processed.
 
 Note that this will run recursively ... that is, when your `fetch` function
 returns some messages to process, it will be called again with the results of
@@ -113,8 +119,8 @@ that is, an `update` function that you can then pass to `programWithFlags` (or
 use in another way).
 
 -}
-updateThenFetch : (model -> List msg) -> (msg -> model -> ( model, Cmd msg )) -> msg -> model -> ( model, Cmd msg )
-updateThenFetch fetch update msg model =
+andThenFetch : (model -> List msg) -> (msg -> model -> ( model, Cmd msg )) -> msg -> model -> ( model, Cmd msg )
+andThenFetch fetch update msg model =
     let
         initialResult =
             update msg model
@@ -137,4 +143,4 @@ updateThenFetch fetch update msg model =
         -- we can fix it.  And, you could imagine cases in which the fetch
         -- actually triggers another fetch in a way that will end, and is
         -- desirable.
-        sequence (updateThenFetch fetch update) fetchMsgs initialResult
+        sequence (andThenFetch fetch update) fetchMsgs initialResult
