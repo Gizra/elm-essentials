@@ -11,6 +11,7 @@ module Gizra.Html
         , stopPropagation
         , showIf
         , showMaybe
+        , voidHref
         )
 
 {-| Utilities for working with `Html`
@@ -35,9 +36,15 @@ module Gizra.Html
 
 @docs intToPx, floatToPx
 
+
+## Atrributes
+
+@docs voidHref
+
 -}
 
 import Html exposing (..)
+import Html.Attributes exposing (href)
 import Html.Events exposing (Options)
 import Html.Keyed
 import Round
@@ -170,3 +177,17 @@ showIf condition html =
 showMaybe : Maybe (Html msg) -> Html msg
 showMaybe =
     Maybe.withDefault emptyNode
+
+
+{-| Sometimes you want to provide an `href` attribute in order to trigger
+some browser behaviour, but you don't want a click to actually do anything.
+You can use this attribute for that purpose -- it provides an
+
+    href "javascript: void(0)"
+
+... which does nothing when clicked, not even as much as `href "#"` would do.
+
+-}
+voidHref : Attribute msg
+voidHref =
+    href "javascript: void(0)"
