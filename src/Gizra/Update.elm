@@ -59,10 +59,10 @@ sequenceExtra updater msgs startingPoint =
                 ( newModel, newCmd, newMsgs ) =
                     updater eachMsg modelSoFar
             in
-                ( newModel
-                , Cmd.batch [ cmdsSoFar, newCmd ]
-                , msgsSoFar ++ newMsgs
-                )
+            ( newModel
+            , Cmd.batch [ cmdsSoFar, newCmd ]
+            , msgsSoFar ++ newMsgs
+            )
         )
         startingPoint
         msgs
