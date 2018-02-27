@@ -121,26 +121,22 @@ use in another way).
 -}
 andThenFetch : (model -> List msg) -> (msg -> model -> ( model, Cmd msg )) -> msg -> model -> ( model, Cmd msg )
 andThenFetch fetch update msg model =
-    let
-        initialResult =
-            update msg model
+    -- First, we do the "regular" update, then we apply the `fetch` logic.  In
+    -- principle, we could integrate with `animationFrame` in some way.  Since
+    -- this is driven by the needs of the view, there's no need to check any
+    -- faster than the view is drawn.
+    update msg model
+        |> applyFetch fetch update
 
-        fetchMsgs =
-            -- Of course, it's the new model that's relevant, since that's the
-            -- one the `view` function will be getting. Now, we could actually
-            -- integrate this with `animationFrame`, since we don't really need
-            -- to check faster than the `view` method will actually be called.
-            fetch (Tuple.first initialResult)
-    in
-        -- Note that we call ourselves recursively. So, it's vitally important
-        -- that the `fetch` implementations use a `WebData`-like strategy to
-        -- indicate that a request is in progress, and doesn't need to be triggered
-        -- again. Otherwise, we'll immediately be in an infinite loop.
-        --
-        -- We could avoid that by sequencing through `update` instead.
-        -- However, that would cause similar problems more slowly, so it's
-        -- probably best to blow through the stack frames quickly ... that way,
-        -- we can fix it.  And, you could imagine cases in which the fetch
-        -- actually triggers another fetch in a way that will end, and is
-        -- desirable.
-        sequence (andThenFetch fetch update) fetchMsgs initialResult
+
+applyFetch : (model -> List msg) -> (msg -> model -> ( model, Cmd msg )) -> ( model, Cmd msg ) -> ( model, Cmd msg )
+applyFetch fetch update resultSoFar =
+    -- Note that we call ourselves recursively. So, it's vitally important that
+    -- the `fetch` implementations use a `WebData`-like strategy to indicate
+    -- that a request is in progress, and doesn't need to be triggered again.
+    -- Otherwise, we'll immediately be in an infinite loop.
+    --
+    -- We initially sequence through the app's `update`, and only recurse once
+    -- all the messages have been processed.
+    sequence update (fetch (Tuple.first resultSoFar)) resultSoFar
+        |> applyFetch fetch update
