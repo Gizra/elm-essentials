@@ -138,5 +138,12 @@ applyFetch fetch update resultSoFar =
     --
     -- We initially sequence through the app's `update`, and only recurse once
     -- all the messages have been processed.
-    sequence update (fetch (Tuple.first resultSoFar)) resultSoFar
-        |> applyFetch fetch update
+    let
+        msgs =
+            fetch (Tuple.first resultSoFar)
+    in
+    if List.isEmpty msgs then
+        resultSoFar
+    else
+        sequence update msgs resultSoFar
+            |> applyFetch fetch update
