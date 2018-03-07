@@ -1,14 +1,14 @@
 module Gizra.NominalDate
     exposing
-        ( decodeDrupalRange
+        ( NominalDate
+        , NominalDateRange
+        , decodeDrupalRange
         , decodeYYYYMMDD
         , encodeDrupalRange
         , encodeYYYYMMDD
-        , formatYYYYMMDD
         , formatMMDDYYYY
+        , formatYYYYMMDD
         , fromLocalDateTime
-        , NominalDate
-        , NominalDateRange
         )
 
 {-| Some utilities for dealing with "pure" dates that have no time or
@@ -30,7 +30,7 @@ import Json.Decode exposing (Decoder, andThen, string)
 import Json.Decode.Extra exposing (fromResult)
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode exposing (Value, object)
-import Time.Date exposing (year, month, day, fromISO8601)
+import Time.Date exposing (day, fromISO8601, month, year)
 
 
 {-| An alias for `Time.Date.Date` from elm-community/elm-time. Represents
@@ -149,7 +149,6 @@ decodeDrupalRange decoder =
 encodeDrupalRange : (NominalDate -> Value) -> NominalDateRange -> Value
 encodeDrupalRange encoder range =
     object <|
-        ([ ( "value", encoder range.start )
-         , ( "value2", encoder range.end )
-         ]
-        )
+        [ ( "value", encoder range.start )
+        , ( "value2", encoder range.end )
+        ]

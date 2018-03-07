@@ -6,10 +6,10 @@ module Gizra.WebData exposing (sendWithHandler)
 
 -}
 
+import Http exposing (Error(..), Expect)
 import HttpBuilder exposing (..)
 import Json.Decode exposing (Decoder, decodeString, succeed)
 import RemoteData exposing (RemoteData(..), WebData)
-import Http exposing (Error(..), Expect)
 
 
 {-| This is a convenience for the common pattern where we build a request with

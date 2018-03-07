@@ -1,4 +1,4 @@
-module Gizra.Dom exposing (Rectangle, currentTarget, target, findAncestor, checkId, decodeDomRect)
+module Gizra.Dom exposing (Rectangle, checkId, currentTarget, decodeDomRect, findAncestor, target)
 
 {-| Some utility functions for accessing the DOM.
 
@@ -6,9 +6,8 @@ module Gizra.Dom exposing (Rectangle, currentTarget, target, findAncestor, check
 
 -}
 
-import Json.Decode exposing (Decoder, field, at, float, oneOf, fail, succeed, decodeValue, map3, string, map, lazy)
+import Json.Decode exposing (Decoder, at, decodeValue, fail, field, float, lazy, map, map3, oneOf, string, succeed)
 import Json.Decode.Pipeline exposing (decode, required)
-import Json.Decode
 
 
 {-| Applies the supplied decoder to the "target" field.
@@ -130,10 +129,10 @@ findAncestor finder decoder =
             field "parentElement" <|
                 lazy (\_ -> findAncestor finder decoder)
     in
-        oneOf
-            [ checkFinder
-            , checkParent
-            ]
+    oneOf
+        [ checkFinder
+        , checkParent
+        ]
 
 
 {-| The dimensions of a rectangle.

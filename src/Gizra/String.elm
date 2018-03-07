@@ -29,8 +29,8 @@ module Gizra.String
 -}
 
 import Maybe.Extra exposing (isJust)
-import String exposing (startsWith, dropLeft, length, endsWith, padLeft)
 import Regex exposing (regex)
+import String exposing (dropLeft, endsWith, length, padLeft, startsWith)
 
 
 {-| Checks whether the string starts with one of the provided prefixes.

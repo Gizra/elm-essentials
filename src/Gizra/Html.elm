@@ -8,9 +8,9 @@ module Gizra.Html
         , keyedDivKeyed
         , preventDefault
         , preventDefaultAndStopPropagation
-        , stopPropagation
         , showIf
         , showMaybe
+        , stopPropagation
         , voidHref
         )
 
@@ -104,7 +104,7 @@ keyed =
 -}
 intToPx : Int -> String
 intToPx val =
-    (toString val) ++ "px"
+    toString val ++ "px"
 
 
 {-| Convert float to CSS px, with just 1 decimal point, since a px
@@ -117,7 +117,7 @@ is already pretty small.
 -}
 floatToPx : Float -> String
 floatToPx val =
-    (Round.round 1 val) ++ "px"
+    Round.round 1 val ++ "px"
 
 
 {-| Shorthand for event options.

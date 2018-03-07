@@ -9,8 +9,8 @@ date, without time or time zone information.
 
 -}
 
-import Date exposing (Date, Month(..), month, year, hour, minute)
-import Date.Extra.Facts exposing (months, monthNumberFromMonth)
+import Date exposing (Date, Month(..), hour, minute, month, year)
+import Date.Extra.Facts exposing (monthNumberFromMonth, months)
 import Gizra.String exposing (addLeadingZero)
 import List.Extra exposing (elemIndex)
 
@@ -62,7 +62,7 @@ formatDDMMYY delimiter date =
 formatDDMMYYhhmm : String -> Date -> String
 formatDDMMYYhhmm delimiter date =
     -- See comment above re: argument order.
-    (formatDDMMYY delimiter date) ++ " " ++ (hour date |> toString |> addLeadingZero) ++ ":" ++ (minute date |> toString |> addLeadingZero)
+    formatDDMMYY delimiter date ++ " " ++ (hour date |> toString |> addLeadingZero) ++ ":" ++ (minute date |> toString |> addLeadingZero)
 
 
 monthMM : Date -> String
@@ -72,7 +72,7 @@ monthMM =
 
 yearYY : Date -> String
 yearYY date =
-    (year date) % 100 |> toString |> addLeadingZero
+    year date % 100 |> toString |> addLeadingZero
 
 
 {-| A list of all the months, in the traditional order.
