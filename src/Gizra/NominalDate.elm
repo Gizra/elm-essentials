@@ -31,14 +31,15 @@ time zone information.
 -}
 
 import Date
-import Date.Extra exposing (fromParts, diff, Interval(Day))
-import Date.Extra.Facts exposing (monthFromMonthNumber, monthNumberFromMonth)
+import Date.Extra exposing (fromParts, diff, Interval(Day), monthToNumber, numberToMonth)
 import Gizra.String exposing (addLeadingZero, addLeadingZeroes)
 import Json.Decode exposing (Decoder, andThen, string)
 import Json.Decode.Extra exposing (fromResult)
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode exposing (Value, object)
-import Time.Date exposing (day, fromISO8601, month, year, delta, daysInMonth)
+import Time.Date exposing (day, month, year, delta, daysInMonth)
+import Time.Iso8601
+import Time.Iso8601ErrorMsg exposing (renderText)
 
 
 {-| An alias for `Time.Date.Date` from elm-community/elm-time. Represents
@@ -97,7 +98,7 @@ fromLocalDateTime : Date.Date -> NominalDate
 fromLocalDateTime date =
     Time.Date.date
         (Date.year date)
-        (monthNumberFromMonth (Date.month date))
+        (monthToNumber (Date.month date))
         (Date.day date)
 
 
@@ -111,7 +112,7 @@ toLocalDateTime : NominalDate -> Int -> Int -> Int -> Int -> Date.Date
 toLocalDateTime nominal hour minutes seconds milliseconds =
     fromParts
         (year nominal)
-        (monthFromMonthNumber <| month nominal)
+        (numberToMonth <| month nominal)
         (day nominal)
         hour
         minutes
@@ -128,7 +129,7 @@ toLocalDateTime nominal hour minutes seconds milliseconds =
 -}
 decodeYYYYMMDD : Decoder NominalDate
 decodeYYYYMMDD =
-    andThen (fromResult << fromISO8601) string
+    andThen (fromResult << Result.mapError renderText << Time.Iso8601.toDate) string
 
 
 {-| Encode nominal date to string of the form "2017-02-20".

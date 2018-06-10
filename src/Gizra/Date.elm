@@ -10,7 +10,7 @@ date, without time or time zone information.
 -}
 
 import Date exposing (Date, Month(..), hour, minute, month, year)
-import Date.Extra.Facts exposing (monthNumberFromMonth, months)
+import Date.Extra exposing (monthToNumber)
 import Gizra.String exposing (addLeadingZero)
 import List.Extra exposing (elemIndex)
 
@@ -67,7 +67,7 @@ formatDDMMYYhhmm delimiter date =
 
 monthMM : Date -> String
 monthMM =
-    month >> monthNumberFromMonth >> toString >> addLeadingZero
+    month >> monthToNumber >> toString >> addLeadingZero
 
 
 yearYY : Date -> String
@@ -79,4 +79,15 @@ yearYY date =
 -}
 allMonths : List Month
 allMonths =
-    months
+    [ Jan
+    , Feb
+    , Mar
+    , Apr
+    , May
+    , Jun
+    , Jul
+    , Aug
+    , Sep
+    , Oct
+    , Dec
+    ]
