@@ -1,6 +1,5 @@
 module Gizra.Html exposing
     ( keyed, divKeyed, keyedDivKeyed
-    , preventDefault, stopPropagation, preventDefaultAndStopPropagation
     , showIf, showMaybe, emptyNode
     , intToPx, floatToPx
     , voidHref
@@ -12,11 +11,6 @@ module Gizra.Html exposing
 ## Keyed
 
 @docs keyed, divKeyed, keyedDivKeyed
-
-
-## Options
-
-@docs preventDefault, stopPropagation, preventDefaultAndStopPropagation
 
 
 ## Conditionally show HTML
@@ -37,7 +31,6 @@ module Gizra.Html exposing
 
 import Html exposing (..)
 import Html.Attributes exposing (href)
-import Html.Events exposing (Options)
 import Html.Keyed
 import Round
 
@@ -110,33 +103,6 @@ is already pretty small.
 floatToPx : Float -> String
 floatToPx val =
     Round.round 1 val ++ "px"
-
-
-{-| Shorthand for event options.
--}
-preventDefaultAndStopPropagation : Options
-preventDefaultAndStopPropagation =
-    { preventDefault = True
-    , stopPropagation = True
-    }
-
-
-{-| Shorthand for event options.
--}
-stopPropagation : Options
-stopPropagation =
-    { preventDefault = False
-    , stopPropagation = True
-    }
-
-
-{-| Shorthand for event options.
--}
-preventDefault : Options
-preventDefault =
-    { preventDefault = True
-    , stopPropagation = False
-    }
 
 
 {-| Produces an empty text node for the DOM.
