@@ -78,11 +78,11 @@ decodeInt =
             |> andThen
                 (\s ->
                     case String.toInt s of
-                        Ok value ->
+                        Just value ->
                             succeed value
 
-                        Err err ->
-                            fail err
+                        Nothing ->
+                            fail "Not an integer"
                 )
         ]
 
@@ -100,7 +100,7 @@ decodeIntToString : Decoder String
 decodeIntToString =
     oneOf
         [ string
-        , int |> andThen (\v -> succeed (toString v))
+        , int |> andThen (\v -> succeed (String.fromInt v))
         ]
 
 
@@ -125,11 +125,11 @@ decodeFloat =
             |> andThen
                 (\s ->
                     case String.toFloat s of
-                        Ok value ->
+                        Just value ->
                             succeed value
 
-                        Err err ->
-                            fail err
+                        Nothing ->
+                            fail "Not a float"
                 )
         ]
 
@@ -174,7 +174,7 @@ decodeEmptyArrayAs default =
                     succeed default
 
                 else
-                    fail <| "Expected an empty array, not an array with length: " ++ toString length
+                    fail <| "Expected an empty array, not an array with length: " ++ String.fromInt length
             )
 
 
@@ -200,5 +200,5 @@ decodeJsonInString decoder =
                         succeed a
 
                     Err err ->
-                        fail err
+                        fail <| errorToString err
             )

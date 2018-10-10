@@ -24,7 +24,7 @@ module Gizra.String exposing
 -}
 
 import Maybe.Extra exposing (isJust)
-import Regex exposing (regex)
+import Regex
 import String exposing (dropLeft, endsWith, length, padLeft, startsWith)
 
 
@@ -177,4 +177,10 @@ addLeadingZero =
 -}
 isBlank : String -> Bool
 isBlank string =
-    Regex.contains (regex "^\\s*$") string
+    case Regex.fromString "^\\s*$" of
+        Just regex ->
+            Regex.contains regex string
+
+        Nothing ->
+            -- This shouldn't occur, but we can't provie it to the compiler
+            False

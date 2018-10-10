@@ -89,7 +89,7 @@ keyed =
 -}
 intToPx : Int -> String
 intToPx val =
-    toString val ++ "px"
+    String.fromInt val ++ "px"
 
 
 {-| Convert float to CSS px, with just 1 decimal point, since a px
