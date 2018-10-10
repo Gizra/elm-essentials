@@ -1,18 +1,9 @@
-module Gizra.Html
-    exposing
-        ( divKeyed
-        , emptyNode
-        , floatToPx
-        , intToPx
-        , keyed
-        , keyedDivKeyed
-        , preventDefault
-        , preventDefaultAndStopPropagation
-        , showIf
-        , showMaybe
-        , stopPropagation
-        , voidHref
-        )
+module Gizra.Html exposing
+    ( keyed, divKeyed, keyedDivKeyed
+    , showIf, showMaybe, emptyNode
+    , intToPx, floatToPx
+    , voidHref
+    )
 
 {-| Utilities for working with `Html`
 
@@ -20,11 +11,6 @@ module Gizra.Html
 ## Keyed
 
 @docs keyed, divKeyed, keyedDivKeyed
-
-
-## Options
-
-@docs preventDefault, stopPropagation, preventDefaultAndStopPropagation
 
 
 ## Conditionally show HTML
@@ -45,7 +31,6 @@ module Gizra.Html
 
 import Html exposing (..)
 import Html.Attributes exposing (href)
-import Html.Events exposing (Options)
 import Html.Keyed
 import Round
 
@@ -55,8 +40,8 @@ import Round
 You can use it just like `Html.div`.
 
     divKeyed []
-        [ ("first-key", functionThatProducesSomeHtml)
-        , ("second-key", anotherFunction)
+        [ ( "first-key", functionThatProducesSomeHtml )
+        , ( "second-key", anotherFunction )
         ]
 
 -}
@@ -94,7 +79,7 @@ idiom for doing that.
 -}
 keyed : String -> Html msg -> ( String, Html msg )
 keyed =
-    (,)
+    \a b -> ( a, b )
 
 
 {-| Convert integer to CSS px.
@@ -104,7 +89,7 @@ keyed =
 -}
 intToPx : Int -> String
 intToPx val =
-    toString val ++ "px"
+    String.fromInt val ++ "px"
 
 
 {-| Convert float to CSS px, with just 1 decimal point, since a px
@@ -118,33 +103,6 @@ is already pretty small.
 floatToPx : Float -> String
 floatToPx val =
     Round.round 1 val ++ "px"
-
-
-{-| Shorthand for event options.
--}
-preventDefaultAndStopPropagation : Options
-preventDefaultAndStopPropagation =
-    { preventDefault = True
-    , stopPropagation = True
-    }
-
-
-{-| Shorthand for event options.
--}
-stopPropagation : Options
-stopPropagation =
-    { preventDefault = False
-    , stopPropagation = True
-    }
-
-
-{-| Shorthand for event options.
--}
-preventDefault : Options
-preventDefault =
-    { preventDefault = True
-    , stopPropagation = False
-    }
 
 
 {-| Produces an empty text node for the DOM.
@@ -168,6 +126,7 @@ showIf : Bool -> Html msg -> Html msg
 showIf condition html =
     if condition then
         html
+
     else
         emptyNode
 

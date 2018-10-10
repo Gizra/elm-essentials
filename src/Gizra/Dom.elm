@@ -1,4 +1,4 @@
-module Gizra.Dom exposing (Rectangle, checkId, currentTarget, decodeDomRect, findAncestor, target)
+module Gizra.Dom exposing (Rectangle, currentTarget, target, findAncestor, checkId, decodeDomRect)
 
 {-| Some utility functions for accessing the DOM.
 
@@ -6,8 +6,7 @@ module Gizra.Dom exposing (Rectangle, checkId, currentTarget, decodeDomRect, fin
 
 -}
 
-import Json.Decode exposing (Decoder, at, decodeValue, fail, field, float, lazy, map, map3, oneOf, string, succeed)
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode exposing (Decoder, at, decodeValue, fail, field, float, lazy, map, map3, map4, oneOf, string, succeed)
 
 
 {-| Applies the supplied decoder to the "target" field.
@@ -121,6 +120,7 @@ findAncestor finder decoder =
                     (\found ->
                         if found then
                             decoder
+
                         else
                             fail "Keep trying"
                     )
@@ -155,7 +155,7 @@ type alias Rectangle =
         }
     """
         |> decodeString decodeDomRect
-    --> Ok
+            --> Ok
             { top = 27
             , left = 32
             , width = 45
@@ -165,11 +165,18 @@ type alias Rectangle =
 -}
 decodeDomRect : Decoder Rectangle
 decodeDomRect =
-    decode Rectangle
-        |> required "top" float
-        |> required "left" float
-        |> required "width" float
-        |> required "height" float
+    map4
+        (\top left width height ->
+            { top = top
+            , left = left
+            , width = width
+            , height = height
+            }
+        )
+        (field "top" float)
+        (field "left" float)
+        (field "width" float)
+        (field "height" float)
 
 
 {-| Provides a decoder which indicates whether the `id` field is equal to the

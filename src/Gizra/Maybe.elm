@@ -18,5 +18,6 @@ when : Bool -> a -> Maybe a
 when condition value =
     if condition then
         Just value
+
     else
         Nothing

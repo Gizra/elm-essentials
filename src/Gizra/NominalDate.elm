@@ -1,18 +1,11 @@
-module Gizra.NominalDate
-    exposing
-        ( NominalDate
-        , NominalDateRange
-        , decodeDrupalRange
-        , decodeYYYYMMDD
-        , encodeDrupalRange
-        , encodeYYYYMMDD
-        , formatMMDDYYYY
-        , formatYYYYMMDD
-        , fromLocalDateTime
-        , toLocalDateTime
-        , diffDays
-        , diffCalendarMonthsAndDays
-        )
+module Gizra.NominalDate exposing
+    ( NominalDate
+    , decodeYYYYMMDD, encodeYYYYMMDD
+    , formatYYYYMMDD, formatMMDDYYYY
+    , fromLocalDateTime, toLocalDateTime
+    , diffDays, diffCalendarMonthsAndDays
+    , NominalDateRange, decodeDrupalRange, encodeDrupalRange
+    )
 
 {-| Some utilities for dealing with "pure" dates that have no time or
 time zone information.
@@ -31,13 +24,12 @@ time zone information.
 -}
 
 import Date
-import Date.Extra exposing (fromParts, diff, Interval(Day), monthToNumber, numberToMonth)
+import Date.Extra exposing (Interval(..), diff, fromParts, monthToNumber, numberToMonth)
 import Gizra.String exposing (addLeadingZero, addLeadingZeroes)
-import Json.Decode exposing (Decoder, andThen, string)
+import Json.Decode exposing (Decoder, andThen, string, map2, field)
 import Json.Decode.Extra exposing (fromResult)
-import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode exposing (Value, object)
-import Time.Date exposing (day, month, year, delta, daysInMonth)
+import Time.Date exposing (day, daysInMonth, delta, month, year)
 import Time.Iso8601
 import Time.Iso8601ErrorMsg exposing (renderText)
 
@@ -153,17 +145,22 @@ encodeYYYYMMDD =
         }
     """
         |> decodeString (decodeDrupalRange decodeYYYYMMDD)
-    --> Ok
-            { start = date 2017 07 21
-            , end = date 2017 07 23
+            --> Ok
+            { start = date 2017 7 21
+            , end = date 2017 7 23
             }
 
 -}
 decodeDrupalRange : Decoder NominalDate -> Decoder NominalDateRange
 decodeDrupalRange decoder =
-    decode NominalDateRange
-        |> required "value" decoder
-        |> required "value2" decoder
+    map2
+        (\start end ->
+            { start = start
+            , end = end
+            }
+        )
+        (field "value" decoder)
+        (field "value2" decoder)
 
 
 {-| Given an encoder, encodes a range as Drupal expects it, with a `value` and `value2`.
@@ -188,9 +185,9 @@ encodeDrupalRange encoder range =
 
 The result is positive if the second parameter is after the first parameter.
 
-    diffDays (date 2017 07 21) (date 2017 07 22) --> 1
+    diffDays (date 2017 7 21) (date 2017 7 22) --> 1
 
-    diffDays (date 2017 07 21) (date 2018 07 22) --> 366
+    diffDays (date 2017 7 21) (date 2018 7 22) --> 366
 
 -}
 diffDays : NominalDate -> NominalDate -> Int
@@ -249,23 +246,24 @@ diffCalendarMonthsAndDays low high =
             , months = (year high * 12 + month high) - (year low * 12 + month low)
             }
     in
-        if uncorrected.days >= 0 then
-            -- This is the easy case ... we're at the same day (or further
-            -- along) in the target month than the original month, so we're
-            -- done ... the answer is some number of full months (however
-            -- long they were) and some number of additional days.
-            uncorrected
-        else
-            -- This is the harder case. We're not as far along in our target
-            -- month as we were in the original month. So, we need to subtract
-            -- 1 from our months, and add something to the (negative) days.
-            --
-            -- Basically, we want to add however many days there were in the
-            -- original month. We're "borrowing" that number of days, to use
-            -- the language of subtraction-by-hand. And, it's the original
-            -- month that is the "partial" month we're borrowing from ... all
-            -- intervening months are full months, and the current month isn't
-            -- finished, so it can't matter how many days it has.
-            { months = uncorrected.months - 1
-            , days = uncorrected.days + (Maybe.withDefault 0 (daysInMonth (year low) (month low)))
-            }
+    if uncorrected.days >= 0 then
+        -- This is the easy case ... we're at the same day (or further
+        -- along) in the target month than the original month, so we're
+        -- done ... the answer is some number of full months (however
+        -- long they were) and some number of additional days.
+        uncorrected
+
+    else
+        -- This is the harder case. We're not as far along in our target
+        -- month as we were in the original month. So, we need to subtract
+        -- 1 from our months, and add something to the (negative) days.
+        --
+        -- Basically, we want to add however many days there were in the
+        -- original month. We're "borrowing" that number of days, to use
+        -- the language of subtraction-by-hand. And, it's the original
+        -- month that is the "partial" month we're borrowing from ... all
+        -- intervening months are full months, and the current month isn't
+        -- finished, so it can't matter how many days it has.
+        { months = uncorrected.months - 1
+        , days = uncorrected.days + Maybe.withDefault 0 (daysInMonth (year low) (month low))
+        }

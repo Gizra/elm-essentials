@@ -11,26 +11,27 @@ module Gizra.List exposing (insertAt, sortDescending)
 head if the position is negative, and at the end if the position is
 out of range.
 
-    insertAt -1 "d" ["a", "b", "c"] --> ["d", "a", "b", "c"]
+    insertAt -1 "d" [ "a", "b", "c" ] --> ["d", "a", "b", "c"]
 
-    insertAt 0 "d" ["a", "b", "c"] --> ["d", "a", "b", "c"]
+    insertAt 0 "d" [ "a", "b", "c" ] --> ["d", "a", "b", "c"]
 
-    insertAt 1 "d" ["a", "b", "c"] --> ["a", "d", "b", "c"]
+    insertAt 1 "d" [ "a", "b", "c" ] --> ["a", "d", "b", "c"]
 
-    insertAt 100 "d" ["a", "b", "c"] --> ["a", "b", "c", "d"]
+    insertAt 100 "d" [ "a", "b", "c" ] --> ["a", "b", "c", "d"]
 
 -}
 insertAt : Int -> a -> List a -> List a
 insertAt index element list =
     if index <= 0 then
         element :: list
+
     else
         List.take index list ++ (element :: List.drop index list)
 
 
 {-| Sort the list in descending order.
 
-    sortDescending ["a", "c", "b"] --> ["c", "b", "a"]
+    sortDescending [ "a", "c", "b" ] --> ["c", "b", "a"]
 
 -}
 sortDescending : List comparable -> List comparable
