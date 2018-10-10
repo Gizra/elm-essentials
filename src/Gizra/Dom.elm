@@ -1,4 +1,4 @@
-module Gizra.Dom exposing (Rectangle, checkId, currentTarget, decodeDomRect, findAncestor, target)
+module Gizra.Dom exposing (Rectangle, currentTarget, target, findAncestor, checkId, decodeDomRect)
 
 {-| Some utility functions for accessing the DOM.
 
@@ -121,6 +121,7 @@ findAncestor finder decoder =
                     (\found ->
                         if found then
                             decoder
+
                         else
                             fail "Keep trying"
                     )
@@ -155,7 +156,7 @@ type alias Rectangle =
         }
     """
         |> decodeString decodeDomRect
-    --> Ok
+            --> Ok
             { top = 27
             , left = 32
             , width = 45

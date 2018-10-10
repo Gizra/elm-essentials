@@ -144,6 +144,7 @@ applyFetch fetch update resultSoFar =
     in
     if List.isEmpty msgs then
         resultSoFar
+
     else
         sequence update msgs resultSoFar
             |> applyFetch fetch update

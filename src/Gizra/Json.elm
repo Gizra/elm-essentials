@@ -1,14 +1,9 @@
-module Gizra.Json
-    exposing
-        ( decodeEmptyArrayAs
-        , decodeFloat
-        , decodeInt
-        , decodeIntDict
-        , decodeIntToString
-        , decodeJsonInString
-        , encodeAnyDict
-        , encodeDict
-        )
+module Gizra.Json exposing
+    ( encodeDict, encodeAnyDict, decodeIntDict
+    , decodeInt, decodeIntToString, decodeFloat
+    , decodeEmptyArrayAs
+    , decodeJsonInString
+    )
 
 {-| Utilities for dealing with JSON.
 
@@ -177,6 +172,7 @@ decodeEmptyArrayAs default =
                 in
                 if length == 0 then
                     succeed default
+
                 else
                     fail <| "Expected an empty array, not an array with length: " ++ toString length
             )

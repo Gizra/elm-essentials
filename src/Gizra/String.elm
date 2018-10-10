@@ -1,13 +1,8 @@
-module Gizra.String
-    exposing
-        ( addLeadingZero
-        , addLeadingZeroes
-        , endsWithOneOf
-        , isBlank
-        , replacePrefixWith
-        , requireAndStripPrefix
-        , startsWithOneOf
-        )
+module Gizra.String exposing
+    ( isBlank
+    , startsWithOneOf, endsWithOneOf, replacePrefixWith, requireAndStripPrefix
+    , addLeadingZero, addLeadingZeroes
+    )
 
 {-| Some functions that work with strings.
 
@@ -81,11 +76,11 @@ requireAndStripPrefix prefixes string =
 {-| Checks whether the string starts with one of the provided prefixes.
 If so, returns the prefix.
 
-    startsWithOneOf ["apple", "banana"] "apple 27" --> Just "apple"
+    startsWithOneOf [ "apple", "banana" ] "apple 27" --> Just "apple"
 
-    startsWithOneOf ["apple", "banana"] "banana 27" --> Just "banana"
+    startsWithOneOf [ "apple", "banana" ] "banana 27" --> Just "banana"
 
-    startsWithOneOf ["apple", "banana"] "grapefruit 35" --> Nothing
+    startsWithOneOf [ "apple", "banana" ] "grapefruit 35" --> Nothing
 
 -}
 startsWithOneOf : List String -> String -> Maybe String
@@ -96,11 +91,11 @@ startsWithOneOf =
 {-| Checks whether the string ends with one of the provided prefixes.
 If so, returns the suffix.
 
-    endsWithOneOf ["apples", "bananas"] "27 apples" --> Just "apples"
+    endsWithOneOf [ "apples", "bananas" ] "27 apples" --> Just "apples"
 
-    endsWithOneOf ["apples", "bananas"] "27 bananas" --> Just "bananas"
+    endsWithOneOf [ "apples", "bananas" ] "27 bananas" --> Just "bananas"
 
-    endsWithOneOf ["apples", "bananas"] "35 grapefruits" --> Nothing
+    endsWithOneOf [ "apples", "bananas" ] "35 grapefruits" --> Nothing
 
 -}
 endsWithOneOf : List String -> String -> Maybe String
@@ -121,6 +116,7 @@ replacePrefixWith : String -> String -> String -> String
 replacePrefixWith prefix newPrefix string =
     if startsWith prefix string then
         newPrefix ++ dropLeft (length prefix) string
+
     else
         string
 
@@ -131,6 +127,7 @@ validate function options string =
         option :: rest ->
             if function option string then
                 Just option
+
             else
                 -- Recursively check the rest of the suffixes.
                 -- This should be tail-call optimized by the compiler,
@@ -147,7 +144,7 @@ validate function options string =
 
     addLeadingZeroes 3 "17" --> "017"
 
-    addLeadingZeroes 2 "27"  --> "27"
+    addLeadingZeroes 2 "27" --> "27"
 
 -}
 addLeadingZeroes : Int -> String -> String
@@ -173,7 +170,7 @@ addLeadingZero =
 
     isBlank "   " --> True
 
-    isBlank "\t\n\r" --> True
+    isBlank "\t\n\u{000D}" --> True
 
     isBlank "blank" --> False
 

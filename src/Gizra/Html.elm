@@ -1,18 +1,10 @@
-module Gizra.Html
-    exposing
-        ( divKeyed
-        , emptyNode
-        , floatToPx
-        , intToPx
-        , keyed
-        , keyedDivKeyed
-        , preventDefault
-        , preventDefaultAndStopPropagation
-        , showIf
-        , showMaybe
-        , stopPropagation
-        , voidHref
-        )
+module Gizra.Html exposing
+    ( keyed, divKeyed, keyedDivKeyed
+    , preventDefault, stopPropagation, preventDefaultAndStopPropagation
+    , showIf, showMaybe, emptyNode
+    , intToPx, floatToPx
+    , voidHref
+    )
 
 {-| Utilities for working with `Html`
 
@@ -55,8 +47,8 @@ import Round
 You can use it just like `Html.div`.
 
     divKeyed []
-        [ ("first-key", functionThatProducesSomeHtml)
-        , ("second-key", anotherFunction)
+        [ ( "first-key", functionThatProducesSomeHtml )
+        , ( "second-key", anotherFunction )
         ]
 
 -}
@@ -94,7 +86,7 @@ idiom for doing that.
 -}
 keyed : String -> Html msg -> ( String, Html msg )
 keyed =
-    (,)
+    \a b -> ( a, b )
 
 
 {-| Convert integer to CSS px.
@@ -168,6 +160,7 @@ showIf : Bool -> Html msg -> Html msg
 showIf condition html =
     if condition then
         html
+
     else
         emptyNode
 

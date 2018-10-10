@@ -1,4 +1,4 @@
-module Gizra.Date exposing (allMonths, formatDDMMYY, formatDDMMYYhhmm)
+module Gizra.Date exposing (formatDDMMYY, formatDDMMYYhhmm, allMonths)
 
 {-| Some functions for working with dates.
 
@@ -18,7 +18,7 @@ import List.Extra exposing (elemIndex)
 {-| Format a date using the supplied delimiter.
 
     import Date exposing (fromString)
-    import Result exposing (Result(Ok), map)
+    import Result exposing (Result(..), map)
 
     fromString "February 3, 1971"
         |> map (formatDDMMYY "-")
@@ -72,7 +72,7 @@ monthMM =
 
 yearYY : Date -> String
 yearYY date =
-    year date % 100 |> toString |> addLeadingZero
+    modBy 100 (year date) |> toString |> addLeadingZero
 
 
 {-| A list of all the months, in the traditional order.

@@ -1,4 +1,4 @@
-module Gizra.WebData exposing (resetError, sendWithHandler, whenNotAsked)
+module Gizra.WebData exposing (sendWithHandler, whenNotAsked, resetError)
 
 {-| Some functions for working with WebData.
 
@@ -67,8 +67,8 @@ See `resetError` to return the `RemoteData` from an error state back
 to `NotAsked`, in cases where (for instance) the user has acknowledged
 an error and wishes to retry the request.
 
-    import Http exposing (Error(Timeout))
-    import Fixtures exposing (Msg(DoThis))
+    import Http exposing (Error(..))
+    import Fixtures exposing (Msg(..))
     import RemoteData exposing (..)
 
     whenNotAsked DoThis NotAsked --> Just DoThis
