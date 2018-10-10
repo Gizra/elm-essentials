@@ -26,9 +26,8 @@ time zone information.
 import Date
 import Date.Extra exposing (Interval(..), diff, fromParts, monthToNumber, numberToMonth)
 import Gizra.String exposing (addLeadingZero, addLeadingZeroes)
-import Json.Decode exposing (Decoder, andThen, string)
+import Json.Decode exposing (Decoder, andThen, string, map2, field)
 import Json.Decode.Extra exposing (fromResult)
-import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode exposing (Value, object)
 import Time.Date exposing (day, daysInMonth, delta, month, year)
 import Time.Iso8601
@@ -154,9 +153,14 @@ encodeYYYYMMDD =
 -}
 decodeDrupalRange : Decoder NominalDate -> Decoder NominalDateRange
 decodeDrupalRange decoder =
-    decode NominalDateRange
-        |> required "value" decoder
-        |> required "value2" decoder
+    map2
+        (\start end ->
+            { start = start
+            , end = end
+            }
+        )
+        (field "value" decoder)
+        (field "value2" decoder)
 
 
 {-| Given an encoder, encodes a range as Drupal expects it, with a `value` and `value2`.
